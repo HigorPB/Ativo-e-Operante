@@ -23,4 +23,16 @@ public class DenunciaService {
     {
         return denrepo.findAll();
     }
+
+    public boolean deleteDen (Long id)
+    {
+        try{
+            denrepo.deleteById(id);
+        }
+        catch (Exception e){
+            return false;
+        }
+
+        return true;
+    }
 }
