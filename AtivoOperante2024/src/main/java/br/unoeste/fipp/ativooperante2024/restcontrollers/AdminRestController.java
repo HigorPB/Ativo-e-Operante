@@ -6,6 +6,7 @@ import br.unoeste.fipp.ativooperante2024.db.repositories.DenunciaRepository;
 import br.unoeste.fipp.ativooperante2024.db.repositories.OrgaoRepository;
 import br.unoeste.fipp.ativooperante2024.services.DenunciaService;
 import br.unoeste.fipp.ativooperante2024.services.OrgaoService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class AdminRestController {
     OrgaoService orgaoservice;
 
     @Autowired
-    DenunciaRepository denrepo;
+    DenunciaService denserv;
 
     @GetMapping("teste-conexao")
     public String testeConexao()
@@ -67,13 +68,22 @@ public class AdminRestController {
     @GetMapping("/get-denuncia")
     public ResponseEntity<Object> buscarUmaDenuncia(@RequestParam(value="id") Long id)
     {
-        return new ResponseEntity<>(denrepo.findById(id) ,HttpStatus.OK);
+        return new ResponseEntity<>(denserv.getDenuncia(id) ,HttpStatus.OK);
     }
 
     @GetMapping("/get-all-denuncia")
     public ResponseEntity<Object> listarDenuncias()
     {
-        return new ResponseEntity<>(denrepo.getAll() ,HttpStatus.OK);
+        return new ResponseEntity<>(denserv.getAllDenuncias() ,HttpStatus.OK);
+    }
+
+    @GetMapping("/delete-denuncia")
+    public ResponseEntity<Object> deletaDen (Long id) {
+
+        if(denserv.deleteDen(id))
+            return new ResponseEntity<>("", HttpStatus.OK);
+        else
+            return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
     }
 
 
